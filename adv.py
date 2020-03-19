@@ -103,6 +103,7 @@ def breadth_first_search(visited_rooms):
 
 # Load world
 
+
 world = World()
 
 
@@ -135,6 +136,17 @@ player = Player(world.starting_room)
 
 
 traversal_path = []
+visited_rooms = {}
+
+while(len(visited_rooms) < len(room_graph)):
+
+    if player.current_room.id not in visited_rooms:
+        new_room(player.current_room, visited_rooms)
+
+    exits = []
+    for new_direction in visited_rooms[player.current_room.id]:
+        if (visited_rooms[player.current_room.id][new_direction] == '?'):
+            exits.append(new_direction)
 
 
 # TRAVERSAL TEST
