@@ -66,8 +66,29 @@ def new_room(room, visited_rooms):
         visited_rooms[room.id][exit_direction] = ''
 
 
-# Load world
+# BFS
 
+
+def breadth_first_search(visited_rooms):
+    # Define our variables
+    visited = set()
+    q = Queue()
+    room = player.current_room
+    # Enqueue the Room ID
+    q.enqueue([room.id])
+    # While theres room...
+    while q.size() > 0:
+        # Dequeue the Path
+        path = q.dequeue()
+        # Define last Node
+        end = path[-1]
+        # If our last Node isnt visited...
+        if end not in visited:
+            # Visit it
+            visited.add(end)
+
+
+# Load world
 
 world = World()
 
@@ -77,19 +98,29 @@ world = World()
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
+
+
 map_file = "maps/main_maze.txt"
 
+
 # Loads the map into a dictionary
+
+
 room_graph = literal_eval(open(map_file, "r").read())
 world.load_graph(room_graph)
 
-# Print an ASCII map
-world.print_rooms()
 
+# Print an ASCII map
+
+
+world.print_rooms()
 player = Player(world.starting_room)
+
 
 # Fill this out with directions to walk
 # traversal_path = ['n', 'n']
+
+
 traversal_path = []
 
 
