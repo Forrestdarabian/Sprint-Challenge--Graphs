@@ -63,7 +63,7 @@ def reverse(direction):
 def new_room(room, visited_rooms):
     visited_rooms[room.id] = {}
     for exit_direction in room.get_exits():
-        visited_rooms[room.id][exit_direction] = ''
+        visited_rooms[room.id][exit_direction] = '?'
 
 
 # BFS
@@ -84,8 +84,21 @@ def breadth_first_search(visited_rooms):
         end = path[-1]
         # If our last Node isnt visited...
         if end not in visited:
-            # Visit it
+            # Add it to visited
             visited.add(end)
+            # Create a for loop and check if the last room has been visited
+            for exit_direction in visited_rooms[end]:
+                # If there is no exit direction in the last room...
+                if (visited_rooms[end][exit_direction] == '?'):
+                    # Return path
+                    return path
+                # However, if it hasnt been visited...
+                elif (visited_rooms[end][exit_direction] not in visited):
+                    # Create a new path
+                    new_path = path + [visited_rooms[end][exit_direction]]
+                    # Enqueue the new path
+                    q.enqueue(new_path)
+    return path
 
 
 # Load world
