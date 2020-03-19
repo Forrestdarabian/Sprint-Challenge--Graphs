@@ -138,8 +138,9 @@ player = Player(world.starting_room)
 traversal_path = []
 visited_rooms = {}
 
+# While the length of visited rooms is less than the length of the entire map
 while(len(visited_rooms) < len(room_graph)):
-
+    # This should traverse the player through rooms
     if player.current_room.id not in visited_rooms:
         new_room(player.current_room, visited_rooms)
 
@@ -147,6 +148,24 @@ while(len(visited_rooms) < len(room_graph)):
     for new_direction in visited_rooms[player.current_room.id]:
         if (visited_rooms[player.current_room.id][new_direction] == '?'):
             exits.append(new_direction)
+
+    if (len(exits) == 0):
+        path = breadth_first_search(visited_rooms)
+        # Translate Room ID to direction
+        for id in path:
+            for exit_direction in visited_rooms[player.current_room.id]:
+                if (exit_direction in visited_rooms[player.current_room.id]):
+                    # print(f"Current room is {player.current_room.id} and direction is {exit_direction}")
+                    if (visited_rooms[player.current_room.id][exit_direction] == id and player.current_room.id != id):
+                        traversal_path.append(exit_direction)
+                        new_room = player.current_room.get_room_in_direction(
+                            exit_direction)
+                        visited_rooms[player.current_room.id][exit_direction] = new_room.id
+                        if (new_room.id not in visited_rooms):
+                            new_room(new_room, visited_rooms)
+                        visited_rooms[new_room.id][reverse(
+                            exit_direction)] = player.current_room.id
+                        player.travel(exit_direction)
 
 
 # TRAVERSAL TEST
